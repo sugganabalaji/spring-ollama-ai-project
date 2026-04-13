@@ -14,7 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
@@ -143,6 +148,15 @@ public class OllamaController {
     public List<Document> getProducts(@RequestParam String text) {
         // return vectorStore.similaritySearch(text);
         return vectorStore.similaritySearch(SearchRequest.builder().query(text).topK(5).build());
+    }
+
+    @PostMapping("/ask")
+    public ResponseEntity<String> processText(@RequestParam String query) {
+        String content = ollamaChatClient.prompt(query)
+                //.advisors(new QuestionAnsweringAdvisor(vectorStore))
+                .call()
+                .content();
+        return ResponseEntity.ok(content);
     }
 
 }
