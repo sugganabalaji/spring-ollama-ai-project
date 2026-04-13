@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: spring-ollama-ai-project
+  servlet:
+    multipart:
+      max-file-size: 50MB
+  main:
+    allow-bean-definition-overriding: true
+
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+    embedding:
+      options:
+        model: text-embedding-ada-002
+
+    ollama:
+      chat:
+        options:
+          model: mistral-large-3:675b-cloud
+      embedding:
+        options:
+          model: mxbai-embed-large:latest
+
+# Docker + RedisDB Configuration
+    vectorstore:
+      redis:
+        index-name: product-index
+        prefix: product
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      client-type: jedis
+# docker run -d --name redis-stack -p 6379:6379 -p 8001:8001 redis/redis-stack:latest
+
+
+#   docker-compose + postgreDB configuration
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/Dev
+#    username: postgres
+#    password: root
+#    driver-class-name: org.postgresql.Driver
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#  sql:
+#    init:
+#      mode: always
+#      schema-locations: classpath:db/schema.sql
+
+
+
